@@ -210,15 +210,15 @@ qa_list = [
             "B": "Relies on a study that may not be representative.",
             "C": "Ignores the possibility that low-fat diets have other benefits.",
             "D": "Assumes doctors are always wrong.",
-            "E": "Fails to define 'low-carb' and 'low-fat' clearly."
+            "E": "Fails to define 'low-carb' and 'low-fat' clearly.",
         },
         "answer": "A",
         "explanation": "The conclusion says 'better for overall health,' but the evidence only shows benefits in weight loss and cholesterol. Overall health includes many other factors (e.g., longevity, disease risk, mental health)."
     },
-   {
-       "id": 16,
-       "type": "Analytical Reasoning",
-       "text": "Exactly three movies—M1, M2, M3—are shown over five days: Monday through Friday. Each day, exactly one movie is shown. Each movie is shown at least once, and no movie is shown on more than two days. M2 cannot be shown on Tuesday or Thursday. M3 must be shown on Wednesday and Friday. If M1 is shown on Monday, which of the following must be true?",
+    {
+        "id": 16,
+        "type": "Analytical Reasoning",
+        "text": "Exactly three movies—M1, M2, M3—are shown over five days: Monday through Friday. Each day, exactly one movie is shown. Each movie is shown at least once, and no movie is shown on more than two days. M2 cannot be shown on Tuesday or Thursday. M3 must be shown on Wednesday and Friday. If M1 is shown on Monday, which of the following must be true?",
         "options": {
             "A": "M1 is shown on Friday.",
             "B": "M2 is shown on Monday.",
@@ -228,7 +228,7 @@ qa_list = [
         },
         "answer": "C",
         "explanation": "M3 must be on Wednesday and Friday (given). So Wednesday = M3, Friday = M3."
-   }
+    }
     {
         "id": 17,
         "type": "Logical Reasoning",

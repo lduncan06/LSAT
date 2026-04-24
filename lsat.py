@@ -754,53 +754,56 @@ def main():
         "Analytical Reasoning": {"attempted": 0, "correct": 0}
     }
 
-#Welcome
-print("Welcome to the LSAT Practice App!")
+    #Welcome
+    print("Welcome to the LSAT Practice App!")
 
-while True:
-    #See whether there are questions left
-    if not unused_questions:
-        print(f"\nThanks for practicing! Final score: {total_correct}/{total_attempted}")
-        break
-
-    #Randomly select from unused questions and remove from list
-    selected = random.choice(unused_questions)
-    unused_questions.remove(selected)
-
-    #Ask the question
-    shuffle_options(selected)
-    ask_question(selected)
-    user_answer = get_user_answer()
-    total_attempted += 1
-    q_type = selected['type']
-    stats[q_type]["attempted"] += 1
-
-    # Compare input to answer of question (case-insensitive comparison)
-    if user_answer == selected['answer']:
-        total_correct += 1
-        stats[q_type]["correct"] += 1
-        # Output 'Correct'
-        print("Correct!")
-        print(f"Explanation: {selected['explanation']}")
-    else:
-        #Add to missed questions list
-        missed_questions.append(selected)
-        # Output the actual answer
-        print(f"Sorry, the correct answer is: {selected['answer']}")
-        print(f"Explanation: {selected['explanation']}")
-
-    if not prompt_continue():
-        if missed_questions:
-            print("\nYou missed these questions. Do you want to review them? (yes/no)")
-            choice = input("> ").strip().lower()
-            if choice in ['yes', 'y']:
-                for q in missed_questions:
-                    print(f"\nQuestion {q['id']}: {q['text']}")
-                    for opt, text in q['options'].items():
-                        print(f"{opt}: {text}")
-                        print(f"Correct answer: {q['answer']}")
-                        print(f"Explanation: {q['explanation']}")
+    while True:
+        #See whether there are questions left
+        if not unused_questions:
             print(f"\nThanks for practicing! Final score: {total_correct}/{total_attempted}")
-            exit()
+            break
+
+        #Randomly select from unused questions and remove from list
+        selected = random.choice(unused_questions)
+        unused_questions.remove(selected)
+
+        #Ask the question
+        shuffle_options(selected)
+        ask_question(selected)
+        user_answer = get_user_answer()
+        total_attempted += 1
+        q_type = selected['type']
+        stats[q_type]["attempted"] += 1
+
+        # Compare input to answer of question (case-insensitive comparison)
+        if user_answer == selected['answer']:
+            total_correct += 1
+            stats[q_type]["correct"] += 1
+            # Output 'Correct'
+            print("Correct!")
+            print(f"Explanation: {selected['explanation']}")
         else:
-            print("Please enter 'yes' or 'no'.")
+            #Add to missed questions list
+            missed_questions.append(selected)
+            # Output the actual answer
+            print(f"Sorry, the correct answer is: {selected['answer']}")
+            print(f"Explanation: {selected['explanation']}")
+
+        if not prompt_continue():
+            if missed_questions:
+                print("\nYou missed these questions. Do you want to review them? (yes/no)")
+                choice = input("> ").strip().lower()
+                if choice in ['yes', 'y']:
+                    for q in missed_questions:
+                        print(f"\nQuestion {q['id']}: {q['text']}")
+                        for opt, text in q['options'].items():
+                            print(f"{opt}: {text}")
+                            print(f"Correct answer: {q['answer']}")
+                            print(f"Explanation: {q['explanation']}")
+                print(f"\nThanks for practicing! Final score: {total_correct}/{total_attempted}")
+                exit()
+            else:
+                print("Please enter 'yes' or 'no'.")
+
+if __name__ == "__main__":
+    main()

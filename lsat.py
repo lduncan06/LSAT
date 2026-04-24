@@ -711,6 +711,19 @@ def ask_question(q):
     for option, text in q['options'].items():
         print(f"{option}: {text}")
 
+def shuffle_options(q):
+    items = list(q["options"].items())  # [('A', '...'), ('B', '...'), ...]
+    random.shuffle(items)
+    new_options = {}
+    new_answer_label = None
+    labels = ['A', 'B', 'C', 'D', 'E']
+    for new_label, (old_label, text) in zip(labels, items):
+        new_options[new_label] = text
+        if old_label == q["answer"]:
+            new_answer_label = new_label
+    q["options"] = new_options
+    q["answer"] = new_answer_label
+
 def get_user_answer():
     while True:
         ans = input("Your answer: ").strip().upper()
@@ -755,6 +768,7 @@ while True:
     unused_questions.remove(selected)
 
     #Ask the question
+    shuffle_options(selected)
     ask_question(selected)
     user_answer = get_user_answer()
     total_attempted += 1

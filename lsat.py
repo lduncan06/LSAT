@@ -3,7 +3,6 @@
 
 import random
 
-from numpy import rint
 qa_list = [
     {
         "id": 1,
@@ -798,8 +797,8 @@ def main():
                         print(f"\nQuestion {q['id']}: {q['text']}")
                         for opt, text in q['options'].items():
                             print(f"{opt}: {text}")
-                            print(f"Correct answer: {q['answer']}")
-                            print(f"Explanation: {q['explanation']}")
+                        print(f"Correct answer: {q['answer']}")
+                        print(f"Explanation: {q['explanation']}")
                 print(f"\nThanks for practicing! Final score: {total_correct}/{total_attempted}")
                 exit()
             else:

@@ -706,6 +706,28 @@ qa_list = [
     }
 ]
 
+def ask_question(q):
+    print(f"\nQuestion {q['id']} ({q['type']}): {q['text']}")
+    for option, text in q['options'].items():
+        print(f"{option}: {text}")
+
+def get_user_answer():
+    while True:
+        ans = input("Your answer: ").strip().upper()
+        if ans in ['A', 'B', 'C', 'D', 'E']:
+            return ans
+        print("Please enter A, B, C, D, or E.")
+
+def prompt_continue():
+    while True:
+        cont = input("Do you want to try another question? (yes/no): ").strip().lower()
+        if cont in ['yes', 'y']:
+            return True
+        if cont in ['no', 'n']:
+            return False
+        print("Please enter 'yes' or 'no'.")
+
+
 #Track unused questions
 unused_questions = qa_list.copy()
 missed_questions = []

@@ -754,11 +754,9 @@ while True:
     selected = random.choice(unused_questions)
     unused_questions.remove(selected)
 
-    # Ask for input
-    print(f"\nQuestion: {selected['text']}")
-    for option, text in selected['options'].items():
-        print(f"{option}: {text}")
-    user_answer = input("Your answer: ").strip().upper()
+    #Ask the question
+    ask_question(selected)
+    user_answer = get_user_answer()
     total_attempted += 1
     q_type = selected['type']
     stats[q_type]["attempted"] += 1

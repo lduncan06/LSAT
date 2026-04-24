@@ -727,19 +727,19 @@ def prompt_continue():
             return False
         print("Please enter 'yes' or 'no'.")
 
+def main():
+    #Track unused questions
+    unused_questions = qa_list.copy()
+    missed_questions = []
 
-#Track unused questions
-unused_questions = qa_list.copy()
-missed_questions = []
-
-#Track correct answers of total attempted questions
-total_attempted = 0
-total_correct = 0
-stats = {
-    "Logical Reasoning": {"attempted": 0, "correct": 0},
-    "Reading Comprehension": {"attempted": 0, "correct": 0},
-    "Analytical Reasoning": {"attempted": 0, "correct": 0}
-}
+    #Track correct answers of total attempted questions
+    total_attempted = 0
+    total_correct = 0
+    stats = {
+        "Logical Reasoning": {"attempted": 0, "correct": 0},
+        "Reading Comprehension": {"attempted": 0, "correct": 0},
+        "Analytical Reasoning": {"attempted": 0, "correct": 0}
+    }
 
 #Welcome
 print("Welcome to the LSAT Practice App!")

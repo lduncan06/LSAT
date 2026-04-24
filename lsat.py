@@ -2,6 +2,8 @@
 # CS32 Project
 
 import random
+
+from numpy import rint
 qa_list = [
     {
         "id": 1,
@@ -761,6 +763,16 @@ while True:
                   f" ({total_correct/total_attempted*100:.1f}%)")
             break
         elif cont in ['no', 'n']:
+            if missed_questions:
+                print("\nYou missed these questions. Do you want to review them? (yes/no)")
+                choice = input("> ").strip().lower()
+                if choice in ['yes', 'y']:
+                    for q in missed_questions:
+                        print(f"\nQuestion {q['id']}: {q['text']}")
+                        for opt, text in q['options'].items():
+                            print(f"{opt}: {text}")
+                            print(f"Correct answer: {q['answer']}")
+                            print(f"Explanation: {q['explanation']}")
             print(f"\nThanks for practicing! Final score: {total_correct}/{total_attempted}")
             exit()
         else:

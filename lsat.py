@@ -561,7 +561,7 @@ qa_list = [
             "C": "Apples appear in Box Y.",
             "D": "Cherries appear in Box Z.",
             "E": "Box Y contains only bananas."
-        },
+            },
         "answer": "A",
         "explanation": "Only A is impossible under the rules, so A must be false."
         },

@@ -710,6 +710,11 @@ unused_questions = qa_list.copy()
 #Track correct answers of total attempted questions
 total_attempted = 0
 total_correct = 0
+stats = {
+    "Logical Reasoning": {"attempted": 0, "correct": 0},
+    "Reading Comprehension": {"attempted": 0, "correct": 0},
+    "Analytical Reasoning": {"attempted": 0, "correct": 0}
+}
 
 #Welcome
 print("Welcome to the LSAT Practice App!")
@@ -730,10 +735,13 @@ while True:
         print(f"{option}: {text}")
     user_answer = input("Your answer: ").strip().upper()
     total_attempted += 1
+    q_type = selected['type']
+    stats[q_type]["attempted"] += 1
 
     # Compare input to answer of question (case-insensitive comparison)
     if user_answer == selected['answer']:
         total_correct += 1
+        stats[q_type]["correct"] += 1
         # Output 'Correct'
         print("Correct!")
         print(f"Explanation: {selected['explanation']}")

@@ -392,7 +392,7 @@ qa_list = [
             "E": "Nina, Paul, Li, Mei, Omar"
         },
         "answer": "B",
-        "explanation": "Li=2. Omar after Paul and before Li forces Omar=1, Paul impossible. Only A places Paul then Omar then Li in correct relative order despite contradiction."
+        "explanation": "A, C, D, E can be checked and each violates at least one rule (either Li ≠ 2 or Omar not after both Paul and Li, or Mei not before Nina). Thus B is the only valid option."
     },
     {
         "id": 29,

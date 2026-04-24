@@ -706,6 +706,7 @@ qa_list = [
 
 #Track unused questions
 unused_questions = qa_list.copy()
+missed_questions = []
 
 #Track correct answers of total attempted questions
 total_attempted = 0
@@ -746,6 +747,8 @@ while True:
         print("Correct!")
         print(f"Explanation: {selected['explanation']}")
     else:
+        #Add to missed questions list
+        missed_questions.append(selected)
         # Output the actual answer
         print(f"Sorry, the correct answer is: {selected['answer']}")
         print(f"Explanation: {selected['explanation']}")

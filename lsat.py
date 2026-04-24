@@ -213,7 +213,7 @@ qa_list = [
             "E": "Fails to define 'low-carb' and 'low-fat' clearly.",
         },
         "answer": "A",
-        "explanation": "The conclusion says 'better for overall health,' but the evidence only shows benefits in weight loss and cholesterol. Overall health includes many other factors (e.g., longevity, disease risk, mental health)."
+        "explanation": "The conclusion says 'better for overall health,' but the evidence only shows benefits in weight loss and cholesterol. Overall health includes many other factors (e.g., longevity, disease risk, mental health).",
     },
     {
         "id": 16,

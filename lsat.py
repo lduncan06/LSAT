@@ -228,7 +228,7 @@ qa_list = [
         },
         "answer": "C",
         "explanation": "M3 must be on Wednesday and Friday (given). So Wednesday = M3, Friday = M3."
-    }
+    },
     {
         "id": 17,
         "type": "Logical Reasoning",
@@ -554,7 +554,7 @@ qa_list = [
     {
         "id": 40,
         "type": "Analytical Reasoning",
-        "text": "Three boxes—Box X, Box Y, Box Z—each contain at least one of three types of fruit: apples, bananas, cherries. No box contains all three types. Box X contains exactly two types. Any fruit type that appears in Box Y also appears in Box X. Bananas appear in all three boxes. Apples do not appear in Box X."
+        "text": "Three boxes—Box X, Box Y, Box Z—each contain at least one of three types of fruit: apples, bananas, cherries. No box contains all three types. Box X contains exactly two types. Any fruit type that appears in Box Y also appears in Box X. Bananas appear in all three boxes. Apples do not appear in Box X.",
         "options": {
             "A": "Apples appear in Box X.",
             "B": "Cherries appear in Box X.",

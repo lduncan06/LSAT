@@ -746,6 +746,8 @@ while True:
     while True:
         cont = input("Do you want to try another question? (yes/no): ").strip().lower()
         if cont in ['yes', 'y']:
+            print(f"Current score: {total_correct}/{total_attempted}"
+                  f" ({total_correct/total_attempted*100:.1f}%)")
             break
         elif cont in ['no', 'n']:
             print(f"\nThanks for practicing! Final score: {total_correct}/{total_attempted}")

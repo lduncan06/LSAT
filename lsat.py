@@ -226,6 +226,7 @@ qa_list = [
         },
         "answer": "C",
         "explanation": "M3 must be on Wednesday and Friday (given). So Wednesday = M3, Friday = M3."
+   }
     {
         "id": 17,
         "type": "Logical Reasoning",
@@ -551,7 +552,7 @@ qa_list = [
     {
         "id": 40,
         "type": "Analytical Reasoning",
-        "text": "Three boxes—Box X, Box Y, Box Z—each contain at least one of three types of fruit: apples, bananas, cherries. No box contains all three types. Box X contains exactly two types. Any fruit type that appears in Box Y also appears in Box X. Bananas appear in all three boxes. Which of the following must be false?",
+        "text": "Three boxes—Box X, Box Y, Box Z—each contain at least one of three types of fruit: apples, bananas, cherries. No box contains all three types. Box X contains exactly two types. Any fruit type that appears in Box Y also appears in Box X. Bananas appear in all three boxes. Apples do not appear in Box X."
         "options": {
             "A": "Apples appear in Box X.",
             "B": "Cherries appear in Box X.",
@@ -559,9 +560,8 @@ qa_list = [
             "D": "Cherries appear in Box Z.",
             "E": "Box Y contains only bananas."
         },
-        "answer": "C",
-        "explanation": "If apples appear in Y, then apples must appear in X. Then X = bananas + apples. Y could still have apples. But if Y has apples, Y could be {bananas, apples} — that's allowed. However, the LSAT key often says C must be false because it forces X to have apples, but that's possible. Given standard answer keys, C is correct by elimination."
-    },
+        "answer": "A",
+        "explanation": "Only A is impossible under the rules, so A must be false."},
     {
         "id": 41,
         "type": "Logical Reasoning",

@@ -563,7 +563,8 @@ qa_list = [
             "E": "Box Y contains only bananas."
         },
         "answer": "A",
-        "explanation": "Only A is impossible under the rules, so A must be false."},
+        "explanation": "Only A is impossible under the rules, so A must be false."
+        },
     {
         "id": 41,
         "type": "Logical Reasoning",

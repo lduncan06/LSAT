@@ -383,7 +383,7 @@ qa_list = [
     {
         "id": 28,
         "type": "Analytical Reasoning",
-        "text": "Five painters—Li, Mei, Nina, Omar, Paul—each paint exactly one of five portraits numbered 1 through 5 in order. Conditions: Li paints portrait 2. Mei paints before Nina. Omar paints after Paul but before Li. Which of the following could be the order of painters from portrait 1 to 5?",
+        "text": "Five painters—Li, Mei, Nina, Omar, Paul—each paint exactly one of five portraits numbered 1 through 5 in order. Conditions: Li paints portrait 2. Mei paints before Nina. Omar paints after Paul and after Li. Which of the following could be the order of painters from portrait 1 to 5?",
         "options": {
             "A": "Paul, Omar, Li, Mei, Nina",
             "B": "Mei, Li, Paul, Omar, Nina",
@@ -391,7 +391,7 @@ qa_list = [
             "D": "Mei, Li, Nina, Paul, Omar",
             "E": "Nina, Paul, Li, Mei, Omar"
         },
-        "answer": "A",
+        "answer": "B",
         "explanation": "Li=2. Omar after Paul and before Li forces Omar=1, Paul impossible. Only A places Paul then Omar then Li in correct relative order despite contradiction."
     },
     {

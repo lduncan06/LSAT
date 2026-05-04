@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LSAT Practice - Timed & Untimed Modes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .mode-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .mode-btn {
+            flex: 1;
+            padding: 15px;
+            font-size: 1.1em;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .mode-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .mode-btn:hover:not(.active) {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+        
+        .timer-section {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .timer {
+            font-size: 3em;
+            font-weight: bold;
+            font-family: monospace;
+            margin: 10px 0;
+        }
+        
+        .timer.warning {
+            color: #ffeb3b;
+            animation: pulse 1s infinite;
+        }
+        
+        .timer.critical {
+            color: #ff4444;
+            animation: pulse 0.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .question-counter {
+            font-size: 1.1em;
+            margin-top: 10px;
+        }
+        
+        .stats {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            flex-wrap: wrap;
+        }
+        
+        .stat-item {
+            flex: 1;
+            min-width: 100px;
+        }
+        
+        .stat-number {
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+        
+        .score-preview {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .question-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        
+        .question-text {
+            font-size: 1.2em;
+            font-weight: 500;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        .question-type {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-bottom: 15px;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 20px 0;
+        }
+        
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .option:hover:not(.disabled) {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+        
+        .option.selected {
+            border-color: #667eea;
+            background: #e8edff;
+        }
+        
+        .option.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .option-letter {
+            font-weight: bold;
+            font-size: 1.2em;
+            width: 40px;
+            color: #667eea;
+        }
+        
+        .option-text {
+            flex: 1;
+        }
+        
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin: 10px 5px;
+        }
+        
+        button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            background: #5a67d8;
+        }
+        
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .submit-btn {
+            background: #48bb78;
+            font-size: 1.1em;
+            padding: 15px 40px;
+        }
+        
+        .submit-btn:hover:not(:disabled) {
+            background: #38a169;
+        }
+        
+        .reset-btn {
+            background: #ed8936;
+        }
+        
+        .reset-btn:hover:not(:disabled) {
+            background: #dd6b20;
+        }
+        
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+        }
+        
+        .feedback.correct {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            display: block;
+        }
+        
+        .feedback.incorrect {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            display: block;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        .results-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .results-content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            text-align: center;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .lsat-score {
+            font-size: 3em;
+            color: #667eea;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        
+        .percentile {
+            font-size: 1.2em;
+            color: #666;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            .timer {
+                font-size: 2em;
+            }
+            .stat-number {
+                font-size: 1.3em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📚 LSAT Practice Test</h1>
+        
+        <div class="mode-selector">
+            <button class="mode-btn active" onclick="selectMode('untimed')">📖 Untimed Practice</button>
+            <button class="mode-btn" onclick="selectMode('timed')">⏱️ Timed Quiz (35 min)</button>
+        </div>
+        
+        <div id="timerSection" class="timer-section" style="display: none;">
+            <div>Time Remaining</div>
+            <div class="timer" id="timer">35:00</div>
+            <div class="question-counter" id="questionCounter">Question 1 of 25</div>
+        </div>
+        
+        <div class="stats" id="statsSection">
+            <div class="stat-item">
+                <div class="stat-number" id="score">0</div>
+                <div class="stat-label">Score</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="attempted">0</div>
+                <div class="stat-label">Attempted</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="remaining">0</div>
+                <div class="stat-label">Remaining</div>
+            </div>
+        </div>
+        
+        <div id="questionContainer">
+            <!-- Questions will load here -->
+        </div>
+        
+        <div class="nav-buttons">
+            <button id="prevBtn" onclick="previousQuestion()" disabled>◀ Previous</button>
+            <button id="checkBtn" onclick="checkAnswer()">Check Answer</button>
+            <button id="nextBtn" onclick="nextQuestion()" disabled>Next ▶</button>
+        </div>
+        
+        <div style="margin-top: 20px; text-align: center;">
+            <button id="submitQuizBtn" class="submit-btn" onclick="submitQuiz()" style="display: none;">Submit Quiz & Get Score</button>
+            <button class="reset-btn" onclick="resetPractice()">Reset Practice</button>
+        </div>
+    </div>
+    
+    <div id="resultsModal" class="results-modal">
+        <div class="results-content">
+            <h2>🎉 Quiz Complete!</h2>
+            <div class="lsat-score" id="lsatScore">120</div>
+            <div class="percentile" id="percentile"></div>
+            <div id="detailedResults"></div>
+            <button onclick="closeResults()" style="margin-top: 20px;">Continue Practicing</button>
+        </div>
+    </div>
+
+    <script>
+        let questions = [];
+        let currentIndex = 0;
+        let userAnswers = {};
+        let feedbackGiven = {};
+        let currentMode = 'untimed';
+        let timerInterval = null;
+        let timeRemaining = 35 * 60; // 35 minutes in seconds
+        let quizActive = false;
+        let quizSubmitted = false;
+        let QUIZ_SIZE = 25;
+        
+        // Load questions from server
+        async function loadQuestions() {
+            try {
+                const response = await fetch('/api/questions');
+                const allQuestions = await response.json();
+                // Shuffle and take 25 for timed mode
+                questions = shuffleArray([...allQuestions]);
+                updateRemainingCount();
+                displayQuestion();
+            } catch (error) {
+                console.error('Error loading questions:', error);
+                document.getElementById('questionContainer').innerHTML = 
+                    '<div style="color: red; padding: 20px;">❌ Could not load questions. Make sure the Flask server is running!</div>';
+            }
+        }
+        
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+        
+        function selectMode(mode) {
+            if (quizActive && !confirm('Changing modes will reset your progress. Continue?')) {
+                return;
+            }
+            
+            currentMode = mode;
+            resetPractice();
+            
+            // Update UI
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            if (mode === 'timed') {
+                document.getElementById('timerSection').style.display = 'block';
+                document.getElementById('submitQuizBtn').style.display = 'inline-block';
+                document.getElementById('checkBtn').style.display = 'none';
+                startTimer();
+                quizActive = true;
+            } else {
+                document.getElementById('timerSection').style.display = 'none';
+                document.getElementById('submitQuizBtn').style.display = 'none';
+                document.getElementById('checkBtn').style.display = 'inline-block';
+                if (timerInterval) {
+                    clearInterval(timerInterval);
+                }
+                quizActive = false;
+            }
+        }
+        
+        function startTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            
+            timerInterval = setInterval(() => {
+                if (!quizActive || quizSubmitted) return;
+                
+                if (timeRemaining <= 0) {
+                    // Time's up!
+                    clearInterval(timerInterval);
+                    alert("Time's up! Submitting your quiz...");
+                    submitQuiz();
+                } else {
+                    timeRemaining--;
+                    updateTimerDisplay();
+                }
+            }, 1000);
+        }
+        
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeRemaining / 60);
+            const seconds = timeRemaining % 60;
+            const timerElement = document.getElementById('timer');
+            timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Add warning colors
+            if (timeRemaining < 300) { // Less than 5 minutes
+                timerElement.classList.add('critical');
+                timerElement.classList.remove('warning');
+            } else if (timeRemaining < 600) { // Less than 10 minutes
+                timerElement.classList.add('warning');
+                timerElement.classList.remove('critical');
+            } else {
+                timerElement.classList.remove('warning', 'critical');
+            }
+        }
+        
+        function displayQuestion() {
+            if (!questions.length) return;
+            
+            const q = questions[currentIndex];
+            const isAnswered = userAnswers[currentIndex] !== undefined;
+            const hasFeedback = feedbackGiven[currentIndex];
+            const isDisabled = (currentMode === 'timed' && quizSubmitted) || (currentMode === 'timed' && hasFeedback);
+            
+            let optionsHtml = '';
+            for (const [letter, text] of Object.entries(q.options)) {
+                const isSelected = userAnswers[currentIndex] === letter;
+                optionsHtml += `
+                    <div class="option ${isSelected ? 'selected' : ''} ${isDisabled ? 'disabled' : ''}" onclick="${!isDisabled ? `selectAnswer('${letter}')` : ''}">
+                        <div class="option-letter">${letter}.</div>
+                        <div class="option-text">${text}</div>
+                    </div>
+                `;
+            }
+            
+            const feedbackHtml = hasFeedback && currentMode === 'untimed' ? `
+                <div class="feedback ${feedbackGiven[currentIndex].correct ? 'correct' : 'incorrect'}">
+                    ${feedbackGiven[currentIndex].correct ? '✅ Correct!' : '❌ Incorrect'}
+                    <br><strong>Correct answer:</strong> ${feedbackGiven[currentIndex].correct_answer}
+                    <br><strong>Explanation:</strong> ${feedbackGiven[currentIndex].explanation}
+                </div>
+            ` : '';
+            
+            document.getElementById('questionContainer').innerHTML = `
+                <div class="question-card">
+                    <div class="question-type">${q.type}</div>
+                    <div class="question-text">${q.text}</div>
+                    <div class="options">${optionsHtml}</div>
+                    ${feedbackHtml}
+                </div>
+            `;
+            
+            // Update navigation buttons for untimed mode
+            if (currentMode === 'untimed') {
+                document.getElementById('prevBtn').disabled = currentIndex === 0;
+                document.getElementById('nextBtn').disabled = currentIndex === questions.length - 1;
+            } else {
+                document.getElementById('prevBtn').disabled = true;
+                document.getElementById('nextBtn').disabled = true;
+            }
+            
+            if (currentMode === 'timed') {
+                document.getElementById('questionCounter').textContent = `Question ${currentIndex + 1} of ${QUIZ_SIZE}`;
+            }
+            
+            updateStats();
+        }
+        
+        function selectAnswer(letter) {
+            if (currentMode === 'timed') {
+                if (quizSubmitted) return;
+                // In timed mode, just record answer without checking
+                userAnswers[currentIndex] = letter;
+                displayQuestion();
+                // Auto-advance? Or let user navigate? We'll let them change answers until submit
+            } else {
+                if (feedbackGiven[currentIndex]) {
+                    alert("You already answered this question! Use Next to move on.");
+                    return;
+                }
+                userAnswers[currentIndex] = letter;
+                displayQuestion();
+            }
+        }
+        
+        async function checkAnswer() {
+            if (currentMode === 'timed') return;
+            
+            if (!userAnswers[currentIndex]) {
+                alert("Please select an answer first!");
+                return;
+            }
+            
+            if (feedbackGiven[currentIndex]) {
+                alert("You've already checked this question!");
+                return;
+            }
+            
+            const q = questions[currentIndex];
+            const response = await fetch('/api/check_answer', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    question_id: q.id,
+                    answer: userAnswers[currentIndex]
+                })
+            });
+            
+            const result = await response.json();
+            feedbackGiven[currentIndex] = result;
+            updateStats();
+            displayQuestion();
+        }
+        
+        function updateStats() {
+            if (currentMode === 'untimed') {
+                let correct = 0;
+                let attempted = 0;
+                
+                for (let i = 0; i < questions.length; i++) {
+                    if (feedbackGiven[i]) {
+                        attempted++;
+                        if (feedbackGiven[i].correct) {
+                            correct++;
+                        }
+                    }
+                }
+                
+                document.getElementById('score').textContent = `${correct}/${attempted}`;
+                document.getElementById('attempted').textContent = attempted;
+                document.getElementById('remaining').textContent = questions.length - attempted;
+            } else {
+                const answered = Object.keys(userAnswers).length;
+                document.getElementById('attempted').textContent = answered;
+                document.getElementById('remaining').textContent = QUIZ_SIZE - answered;
+                document.getElementById('score').textContent = `${answered}/${QUIZ_SIZE}`;
+            }
+        }
+        
+        function updateRemainingCount() {
+            if (currentMode === 'timed') {
+                document.getElementById('remaining').textContent = QUIZ_SIZE;
+            } else {
+                document.getElementById('remaining').textContent = questions.length;
+            }
+        }
+        
+        function previousQuestion() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                displayQuestion();
+            }
+        }
+        
+        function nextQuestion() {
+            if (currentIndex < questions.length - 1) {
+                currentIndex++;
+                displayQuestion();
+            }
+        }
+        
+        async function submitQuiz() {
+            if (quizSubmitted) return;
+            
+            // Check if all questions are answered
+            const answeredCount = Object.keys(userAnswers).length;
+            if (answeredCount < QUIZ_SIZE) {
+                if (!confirm(`You've only answered ${answeredCount} out of ${QUIZ_SIZE} questions. Submit anyway?`)) {
+                    return;
+                }
+            }
+            
+            quizSubmitted = true;
+            if (timerInterval) clearInterval(timerInterval);
+            
+            // Grade the quiz
+            let correctCount = 0;
+            const first25Questions = questions.slice(0, QUIZ_SIZE);
+            
+            for (let i = 0; i < first25Questions.length; i++) {
+                const q = first25Questions[i];
+                const userAnswer = userAnswers[i];
+                
+                if (userAnswer) {
+                    const response = await fetch('/api/check_answer', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({
+                            question_id: q.id,
+                            answer: userAnswer
+                        })
+                    });
+                    const result = await response.json();
+                    if (result.correct) {
+                        correctCount++;
+                    }
+                }
+            }
+            
+            // Calculate LSAT score (scaled 120-180)
+            const lsatScore = calculateLSATScore(correctCount, QUIZ_SIZE);
+            const percentile = getPercentile(lsatScore);
+            
+            // Show results
+            document.getElementById('lsatScore').textContent = lsatScore;
+            document.getElementById('percentile').textContent = `Estimated ${percentile}th percentile`;
+            document.getElementById('detailedResults').innerHTML = `
+                <p>✅ Correct: ${correctCount}/${QUIZ_SIZE}</p>
+                <p>⏱️ Time remaining: ${Math.floor(timeRemaining / 60)}:${(timeRemaining % 60).toString().padStart(2, '0')}</p>
+                <p>📊 Raw Score: ${correctCount}</p>
+            `;
+            document.getElementById('resultsModal').style.display = 'flex';
+        }
+        
+        function calculateLSATScore(correct, total) {
+            // LSAT scoring conversion (approximate)
+            // Each section typically has 25-28 questions
+            // Scaled score ranges from 120-180
+            
+            const percentage = correct / total;
+            
+            if (percentage >= 0.98) return 175 + Math.floor((percentage - 0.98) * 250);
+            if (percentage >= 0.95) return 170;
+            if (percentage >= 0.90) return 165;
+            if (percentage >= 0.85) return 160;
+            if (percentage >= 0.78) return 155;
+            if (percentage >= 0.70) return 150;
+            if (percentage >= 0.60) return 145;
+            if (percentage >= 0.50) return 140;
+            return 120 + Math.floor(percentage * 40);
+        }
+        
+        function getPercentile(score) {
+            // Approximate LSAT percentiles
+            if (score >= 175) return 99;
+            if (score >= 170) return 97;
+            if (score >= 165) return 90;
+            if (score >= 160) return 80;
+            if (score >= 155) return 65;
+            if (score >= 150) return 45;
+            if (score >= 145) return 25;
+            return 10;
+        }
+        
+        function resetPractice() {
+            if (timerInterval) clearInterval(timerInterval);
+            
+            currentIndex = 0;
+            userAnswers = {};
+            feedbackGiven = {};
+            quizSubmitted = false;
+            timeRemaining = 35 * 60;
+            
+            // Reshuffle questions
+            if (questions.length) {
+                questions = shuffleArray(questions);
+            }
+            
+            if (currentMode === 'timed') {
+                quizActive = true;
+                startTimer();
+                updateTimerDisplay();
+            }
+            
+            updateRemainingCount();
+            updateStats();
+            displayQuestion();
+        }
+        
+        function closeResults() {
+            document.getElementById('resultsModal').style.display = 'none';
+            resetPractice();
+        }
+        
+        // Initialize
+        loadQuestions();
+    </script>
+</body>
+</html>

@@ -48,6 +48,11 @@ def prompt_continue():
         print("Please enter 'yes' or 'no'.")
 
 def main():
+    qa_list = load_questions("questions.json")
+    if not qa_list:
+        print("No questions loaded. Exiting.")
+        return
+        
     #Track unused questions
     unused_questions = qa_list.copy()
     missed_questions = []

@@ -1,6 +1,9 @@
 from flask import Flask, jsonify, request
+
+# define application path for Flask
 app = Flask(__name__)
 
+# list of sample LSAT questions
 qa_list = [
     {
         "id": 1,
@@ -704,7 +707,9 @@ qa_list = [
     }
 ]
 
+# says that when a get request is made by running the client in the user's web browser it will look for GET functions
 @app.route('/api/questions', methods=['GET'])
+
 def get_all_questions():
     """Customer asks: 'Can I see all questions?'"""
     return jsonify(qa_list)

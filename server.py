@@ -707,13 +707,13 @@ qa_list = [
 @app.route('/api/questions', methods=['GET'])
 def get_all_questions():
     """Customer asks: 'Can I see all questions?'"""
-    return jsonify(QUESTIONS)
+    return jsonify(qa_list)
 
 # This is another menu item - get ONE specific question
 @app.route('/api/questions/<int:question_id>', methods=['GET'])
 def get_one_question(question_id):
     """Customer asks: 'Can I get question #5?'"""
-    for q in QUESTIONS:
+    for q in qa_list:
         if q['id'] == question_id:
             return jsonify(q)
     return jsonify({"error": "Question not found"}), 404
@@ -726,7 +726,7 @@ def check_answer():
     question_id = data.get('question_id')
     user_answer = data.get('answer')
     
-    for q in QUESTIONS:
+    for q in qa_list:
         if q['id'] == question_id:
             is_correct = (user_answer == q['answer'])
             return jsonify({

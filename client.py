@@ -154,7 +154,7 @@ def get_user_answer():
         print("Please enter A, B, C, D, or E.")
 
 def practice_mode(question):
-     print("\n" + "="*50)
+    print("\n" + "="*50)
     print("🎯 PRACTICE MODE")
     print("="*50)
     print("You'll get feedback after each question, and you can decide when to stop.\n")

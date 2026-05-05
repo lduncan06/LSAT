@@ -4,6 +4,114 @@ import time
 
 SERVER_URL = "http://localhost:5000"
 
+# LSAT Scoring Scale (approximate based on typical LSAT with 25 questions)
+# Real LSAT has ~100 questions, scaled 120-180
+# This scale adjusts for 25 questions to a 120-180 scale
+LSAT_SCALE = {
+    25: 180, 24: 177, 23: 174, 22: 171, 21: 169,
+    20: 167, 19: 165, 18: 163, 17: 161, 16: 159,
+    15: 157, 14: 155, 13: 153, 12: 151, 11: 149,
+    10: 147, 9: 145, 8: 143, 7: 141, 6: 139,
+    5: 137, 4: 135, 3: 133, 2: 130, 1: 125, 0: 120
+}
+
+# Percentile equivalents (approximate for this scaled score range)
+PERCENTILES = {
+    180: 99.9, 177: 99.5, 174: 99.0, 171: 97.5, 169: 95.0,
+    167: 90.0, 165: 85.0, 163: 80.0, 161: 75.0, 159: 70.0,
+    157: 65.0, 155: 60.0, 153: 55.0, 151: 50.0, 149: 45.0,
+    147: 40.0, 145: 35.0, 143: 30.0, 141: 25.0, 139: 20.0,
+    137: 15.0, 135: 10.0, 133: 8.0, 130: 5.0, 125: 2.0, 120: 1.0
+}
+
+def calculate_lsat_score(raw_score, total_questions):
+    """Calculate scaled LSAT score and percentile"""
+    # Get scaled score from our scale (clamp to available keys)
+    scaled_score = LSAT_SCALE.get(raw_score, 120)
+    
+    # Get percentile
+    percentile = PERCENTILES.get(scaled_score, 1.0)
+    
+    return scaled_score, percentile
+
+def display_score_rubric(raw_score, total_questions, scaled_score, percentile, time_used):
+    """Display professional LSAT-style score report"""
+    print("\n" + "="*60)
+    print("🎓 LSAT SCORE REPORT")
+    print("="*60)
+    
+    # Raw score section
+    print(f"\n📊 RAW SCORE")
+    print(f"   Correct Answers: {raw_score}")
+    print(f"   Total Questions: {total_questions}")
+    print(f"   Raw Score: {raw_score}/{total_questions} ({raw_score/total_questions*100:.1f}%)")
+    
+    # Scaled score section (the one that matters for law school)
+    print(f"\n🎯 SCALED SCORE (120-180 scale)")
+    print(f"   ⭐ Your LSAT Score: {scaled_score}")
+    
+    # Visual score bar
+    bar_length = 50
+    score_position = int((scaled_score - 120) / 60 * bar_length)
+    score_bar = "█" * score_position + "░" * (bar_length - score_position)
+    print(f"   [{score_bar}]")
+    print(f"   120{' ' * 20}{scaled_score}{' ' * 20}180")
+    
+    # Percentile rank
+    print(f"\n📈 PERCENTILE RANK")
+    print(f"   You scored higher than {percentile:.1f}% of test takers")
+    
+    # Time information
+    minutes_used = int(time_used // 60)
+    seconds_used = int(time_used % 60)
+    print(f"\n⏱️  TIME")
+    print(f"   Time used: {minutes_used}:{seconds_used:02d}")
+    print(f"   Time limit: 35:00")
+    
+    # Score band (LSAT scores have a margin of error)
+    score_band_low = scaled_score - 3
+    score_band_high = scaled_score + 3
+    print(f"\n🎲 SCORE BAND (90% confidence)")
+    print(f"   Your true score range: {score_band_low}-{score_band_high}")
+    
+    # Law school admission guidance
+    print(f"\n🏛️  LAW SCHOOL ADMISSION GUIDANCE")
+    if scaled_score >= 170:
+        print("   ★ Excellent! Competitive for Top 10 law schools (Harvard, Yale, Stanford)")
+    elif scaled_score >= 165:
+        print("   ★ Very Good! Competitive for Top 20 law schools")
+    elif scaled_score >= 160:
+        print("   ★ Good! Competitive for Top 50 law schools")
+    elif scaled_score >= 155:
+        print("   ★ Solid! Competitive for many accredited law schools")
+    elif scaled_score >= 150:
+        print("   ★ Acceptable! May need strong GPA and recommendations")
+    else:
+        print("   ★ Room for improvement. Consider LSAT prep courses")
+    
+    # Next steps based on score
+    print(f"\n📚 RECOMMENDED NEXT STEPS")
+    if scaled_score >= 165:
+        print("   • Focus on application essays and recommendations")
+        print("   • Research reach, target, and safety schools")
+    elif scaled_score >= 155:
+        print("   • Consider retaking to improve by 5-10 points")
+        print("   • Focus on weak areas identified in review")
+    else:
+        print("   • Strongly consider LSAT prep course (Kaplan, Princeton Review)")
+        print("   • Plan to retake in 2-3 months after intensive study")
+    
+    # Score improvement analysis
+    print(f"\n💡 SCORE IMPROVEMENT POTENTIAL")
+    if raw_score < total_questions:
+        potential_max = LSAT_SCALE.get(total_questions, 180)
+        points_to_gain = potential_max - scaled_score
+        print(f"   • Maximum possible score: {potential_max}")
+        print(f"   • Potential gain: +{points_to_gain} points")
+        print(f"   • Each additional correct answer ≈ +{(points_to_gain/(total_questions-raw_score)):.1f} scaled points")
+    
+    print("\n" + "="*60)
+
 def get_all_questions():
     """Ask the server for all questions"""
     try:
@@ -191,6 +299,14 @@ def test_mode(questions):
         if not result['is_correct']:
             print(f"   Correct answer: {result['correct_answer']}")
             print(f"   Explanation: {result['explanation']}")
+    total_questions = len(user_answers)
+    scaled_score, percentile = calculate_lsat_score(total_correct, total_questions)
+    
+    # Calculate time used
+    elapsed_time = time.time() - start_time
+    
+    # Display LSAT scoring rubric
+    display_score_rubric(total_correct, total_questions, scaled_score, percentile, elapsed_time)
     
     # Ask if they want to review wrong answers in more detail
     wrong_answers = [r for r in results if not r['is_correct']]

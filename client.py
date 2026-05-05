@@ -238,7 +238,9 @@ def test_mode(questions):
         print(f"Time remaining: {minutes_remaining}:{seconds_remaining:02d}")
         print(f"{'='*50}")
         
-        ask_question(q)
+        print(f"\n{i}. {q['text']}")  # Just shows "1. [question text]" instead of original ID
+        for option, text in q['options'].items():
+            print(f"   {option}: {text}")
         user_answer = get_user_answer()
         
         user_answers.append({

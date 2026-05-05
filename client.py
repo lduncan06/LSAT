@@ -242,11 +242,12 @@ def test_mode(questions):
         for option, text in q['options'].items():
             print(f"   {option}: {text}")
         user_answer = get_user_answer()
-        
-        user_answers.append({
+
+    user_answers.append({
             'question': q,
             'user_answer': user_answer,
-            'question_number': i
+            'test_number': i,  # Store the test question number (1-25)
+            'original_id': q['id']  # Keep original ID for reference
         })
     
     # Calculate results

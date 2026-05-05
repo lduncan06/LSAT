@@ -153,7 +153,7 @@ def get_user_answer():
             return ans
         print("Please enter A, B, C, D, or E.")
 
-def practice_mode(question):
+def practice_mode(questions):
     print("\n" + "="*50)
     print("🎯 PRACTICE MODE")
     print("="*50)

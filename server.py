@@ -707,33 +707,34 @@ qa_list = [
     }
 ]
 
-# says that when a get request is made by running the client in the user's web browser it will look for GET functions
+# prompts the get_all_questions function after the url is requested on web browser
 @app.route('/api/questions', methods=['GET'])
-
 def get_all_questions():
-    """Customer asks: 'Can I see all questions?'"""
+    # create and return the list of questions with status=200
     return jsonify(qa_list)
 
-# This is another menu item - get ONE specific question
+# prompts the get_one_question function when a specific question's url is requested
 @app.route('/api/questions/<int:question_id>', methods=['GET'])
 def get_one_question(question_id):
-    """Customer asks: 'Can I get question #5?'"""
     for q in qa_list:
+        # return matching question if its id is in the qa list as a json string
         if q['id'] == question_id:
             return jsonify(q)
+    # if no matching question return an error message and 404 status
     return jsonify({"error": "Question not found"}), 404
 
-# This lets customers submit answers to check
+# allows user to submit their answer when the url is requested then prompt check_answer function
 @app.route('/api/check_answer', methods=['POST'])
 def check_answer():
-    """Customer asks: 'Is my answer correct?'"""
     data = request.json
     question_id = data.get('question_id')
     user_answer = data.get('answer')
     
     for q in qa_list:
         if q['id'] == question_id:
+            # defines and stores the boolean result of the user answer compared with the correct answer
             is_correct = (user_answer == q['answer'])
+            # return a json string with feedback for the answer
             return jsonify({
                 "correct": is_correct,
                 "correct_answer": q['answer'],
@@ -743,9 +744,9 @@ def check_answer():
 
 # This runs the server
 if __name__ == '__main__':
-    print("🚀 Starting the LSAT Question Server...")
-    print("📡 Server running at http://localhost:5000")
-    print("📋 Try these URLs in your browser:")
+    print("Starting the LSAT Question Server...")
+    print("Server running at http://localhost:5000")
+    print("Try these URLs in your browser:")
     print("   - http://localhost:5000/api/questions (all questions)")
     print("   - http://localhost:5000/api/questions/1 (question #1)")
     app.run(debug=True)

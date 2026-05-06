@@ -415,8 +415,8 @@ def test_mode(questions):
             'time_used': elapsed_time,
             'mode': 'test'
         }
-        score_history.save_score_record(score_data)
-        print("\n Score saved to history!")
+    score_history.save_score_record(score_data)
+    print("\n Score saved to history!")
     
 # lets user choose between modes
 def choose_mode():
@@ -457,18 +457,19 @@ def main():
         print("No questions available. Make sure the server is running!")
         return
         
-    mode = choose_mode()
+    while True:
+        mode = choose_mode()
     
-    # run the selected mode
-    if mode == 'practice':
-        practice_mode(all_questions)
-    elif mode == 'test':
-        test_mode(all_questions)
-    elif mode == 'statistics':
-        display_statistics_dashboard(all_questions)
+        # run the selected mode
+        if mode == 'practice':
+            practice_mode(all_questions)
+        elif mode == 'test':
+            test_mode(all_questions)
+        elif mode == 'statistics':
+            display_statistics_dashboard(all_questions)
 
-    # ask if user wants to continue
-    cont = input("\n Return to main menu? (yes/no): ").strip().lower()
+        # ask if user wants to continue
+        cont = input("\n Return to main menu? (yes/no): ").strip().lower()
         if cont not in ['yes', 'y']:
             break
 

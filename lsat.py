@@ -1,5 +1,5 @@
-# LSAT
-# CS32 Project
+# first project draft
+# saved for records, no longer being used in the client-server dialogue
 
 import random
 import json

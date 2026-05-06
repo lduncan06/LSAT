@@ -15,27 +15,6 @@ class LSATScoreHistory:
         self.progress_file = f"{self.data_dir}/{user_name}_progress.json"
         self.scores_file = f"{self.data_dir}/{user_name}_scores.json"
 
-    # save current score for test mode to pause and resume later
-    def save_test_progress(self, test_state):
-        test_state['saved_at'] = datetime.now().isoformat()
-        test_state['user'] = self.user_name
-
-        # open progress file in writing mode
-        with open(self.progress_file, 'w') as f:
-            # save current state as json object attributed to the user
-            json.dump(test_state, f)
-        print(f"Progress saved! You can resume later.")
-
-  
-    def load_test_progress(self):
-      # if the file path exists, open in reading mode and return the data
-        if os.path.exists(self.progress_file):
-            with open(self.progress_file, 'r') as f:
-                progress = json.load(f)
-            # auto deletes progress to make room for a new save
-            os.remove(self.progress_file)
-        return progress
-
     # adds the score to the record for later analytics
     def save_score_record(self, score_data):
         scores = self.load_all_scores()

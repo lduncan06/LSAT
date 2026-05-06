@@ -156,26 +156,23 @@ def get_user_answer():
             return ans
         print("Please enter A, B, C, D, or E.")
 
-# create a display of 
+# display analytics over time
 def display_statistics_dashboard(all_questions):
-    """Show comprehensive statistics dashboard"""
     scores = data_manager.load_all_scores()
     
     if not scores:
-        print("\n📊 Not enough data yet. Take some tests first!")
+        print("\n Not enough data yet. Take some tests first!")
         return
     
-    print("\n" + "="*60)
-    print("📊 LSAT PERFORMANCE DASHBOARD")
-    print("="*60)
+    print("LSAT PERFORMANCE DASHBOARD")
     
-    # Overall statistics
+    # overall statistics
     total_tests = len(scores)
     avg_raw = sum(s['raw_score'] for s in scores) / total_tests
     avg_scaled = sum(s['scaled_score'] for s in scores) / total_tests
     best_score = max(s['scaled_score'] for s in scores)
     
-    print(f"\n📈 OVERALL STATISTICS")
+    print(f"\n OVERALL STATISTICS")
     print(f"   Tests taken: {total_tests}")
     print(f"   Average score: {avg_scaled:.0f} (LSAT)")
     print(f"   Best score: {best_score} (LSAT)")
@@ -183,14 +180,15 @@ def display_statistics_dashboard(all_questions):
     
     # Trend analysis (last 5 tests)
     if total_tests >= 3:
-        print(f"\n📈 PROGRESS TREND (Last 5 tests)")
+        print(f"\n PROGRESS TREND (Last 5 tests)")
         recent = scores[-5:]
-        
+
+        # create a bar chart showing scaled scores from last 5 tests
         for i, score in enumerate(recent, 1):
             bar = "█" * int(score['scaled_score'] / 180 * 40)
             print(f"   Test {i}: {score['scaled_score']:3d} {bar}")
         
-        # Calculate improvement
+        # calculate improvement over last 5 tests
         first_avg = sum(s['scaled_score'] for s in recent[:2]) / 2
         last_avg = sum(s['scaled_score'] for s in recent[-2:]) / 2
         improvement = last_avg - first_avg
@@ -202,24 +200,47 @@ def display_statistics_dashboard(all_questions):
         else:
             print(f"\n   ➡️ Consistent performance")
     
-    # Time analysis
-    print(f"\n⏱️ TIME STATISTICS")
+    # time analysis
+    print(f"\n TIME STATISTICS")
     avg_time = sum(s.get('time_used', 0) for s in scores) / total_tests
     avg_minutes = avg_time / 60
     print(f"   Average time: {avg_minutes:.1f} minutes")
-    
+
+    #provide feedback
     if avg_minutes < 30:
-        print("   ⚡ Fast pace - be careful not to rush!")
+        print("   Fast pace - be careful not to rush!")
     elif avg_minutes > 33:
-        print("   🐢 Working slowly - practice timing!")
+        print("   Working slowly - practice timing!")
     else:
-        print("   ✅ Good pace for LSAT timing!")
+        print("   Good pace for LSAT timing!")
     
-    # Projected score based on trend
+    # projected score based on linear regression of previous scores
     if total_tests >= 3:
-        print(f"\n🎯 SCORE PROJECTION")
-        recent_avg = sum(s['scaled_score'] for s in scores[-3:]) / 3
-        improvement_rate = (best_score - scores[0]['scaled_score']) / total_tests
+        n = len(score_values)
+        x = list(range(1, n + 1))  # Test numbers: 1, 2, 3...
+        y = score_values
+        
+        # calculate means
+        x_mean = sum(x) / n
+        y_mean = sum(y) / n
+        
+        # calculate slope  using linear regression
+        numerator = sum((x[i] - x_mean) * (y[i] - y_mean) for i in range(n))
+        denominator = sum((x[i] - x_mean) ** 2 for i in range(n))
+        
+        slope = numerator / denominator if denominator != 0 else 0
+        
+        # calculate y-intercept
+        intercept = y_mean - slope * x_mean
+        
+        # project next test score
+        next_test_num = n + 1
+        next_projection = slope * next_test_num + intercept
+        
+        print(f"\n LINEAR REGRESSION TREND ANALYSIS")
+        print(f"   Improvement rate: {slope:+.2f} points per test")
+        print(f"   Trend line: Score = {slope:+.2f} × Test# + {intercept:.1f}")
+        print(f"   R-squared (fit quality): {r_squared:.3f}")
         
         next_projection = recent_avg + improvement_rate
         print(f"   Next test projection: {next_projection:.0f}")
@@ -228,8 +249,6 @@ def display_statistics_dashboard(all_questions):
             print("   🌟 On track for Top 10 law schools!")
         elif next_projection >= 160:
             print("   🌟 On track for Top 50 law schools!")
-    
-    print("\n" + "="*60)
 
 # practice mode allows users to answer as many questions as they want with unlimited time 
 # and get immediate feedback after each answer
@@ -279,6 +298,7 @@ def practice_mode(questions):
 # the real LSAT consists of four 35-minute sections each with 25 multiple choice questions
 # this simulates a single section
 def test_mode(questions):
+    global score_history
     """Test mode: 25 random questions, 35 minute time limit, no feedback until the end"""
     print("\n" + "TEST MODE")
     print("You'll have 35 minutes to answer all 25 questions.")
@@ -400,6 +420,7 @@ def choose_mode():
             print("Invalid choice. Please enter 1 or 2.")
             
 def main():
+    global score_history
     print("Welcome to the LSAT Practice App!")
     print("Connecting to question server...")
     

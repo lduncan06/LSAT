@@ -158,10 +158,10 @@ def get_user_answer():
 
 # display analytics over time
 def display_statistics_dashboard(all_questions):
-    scores = data_manager.load_all_scores()
+    scores = score_history.load_all_scores()
     
     if not scores:
-        print("\n Not enough data yet. Take some tests first!")
+        print("\n Not enough scores yet. Take some tests first!")
         return
     
     print("LSAT PERFORMANCE DASHBOARD")

@@ -7,6 +7,9 @@ from score_history import LSATScoreHistory
 # defines where the flask server runs
 SERVER_URL = "http://localhost:5000"
 
+#initialise global variable
+score_history = None
+
 # LSAT Scoring Scale (approximate based on typical LSAT with 25 questions)
 # Real LSAT has ~100 questions, scaled 120-180
 # This scale adjusts for 25 questions to a 120-180 scale
@@ -158,6 +161,7 @@ def get_user_answer():
 
 # display analytics over time
 def display_statistics_dashboard(all_questions):
+    global score_history
     scores = score_history.load_all_scores()
     
     if not scores:
@@ -340,12 +344,12 @@ def test_mode(questions):
             print(f"   {option}: {text}")
         user_answer = get_user_answer()
 
-    user_answers.append({
+        user_answers.append({
             'question': q,
             'user_answer': user_answer,
             'question_number': i,  # Store the test question number (1-25)
             'original_id': q['id']  # Keep original ID for reference
-        })
+         })
     
     # calculate results
     print(" TEST RESULTS")
@@ -402,6 +406,17 @@ def test_mode(questions):
 
     # display LSAT scoring rubric
     display_score_rubric(total_correct, 25, scaled_score, percentile, elapsed_time)
+
+    # save score to history for analytics tracking
+    score_data = {
+            'date': datetime.now().isoformat(),
+            'raw_score': total_correct,
+            'scaled_score': scaled_score,
+            'time_used': elapsed_time,
+            'mode': 'test'
+        }
+        score_history.save_score_record(score_data)
+        print("\n Score saved to history!")
     
 # lets user choose between modes
 def choose_mode():
@@ -426,6 +441,14 @@ def main():
     global score_history
     print("Welcome to the LSAT Practice App!")
     print("Connecting to question server...")
+
+    #get username for score tracking
+    user_name = input("\nEnter your username: ").strip()
+    if not user_name:
+        user_name = "default_user"
+
+    #initialize score tracking variable
+    score_history = LSATScoreHistory(user_name)
     
     # get questions from the server
     all_questions = get_all_questions()
@@ -443,7 +466,11 @@ def main():
         test_mode(all_questions)
     elif mode == 'statistics':
         display_statistics_dashboard(all_questions)
-        
+
+    # ask if user wants to continue
+    cont = input("\n Return to main menu? (yes/no): ").strip().lower()
+        if cont not in ['yes', 'y']:
+            break
 
     print("Thanks for practicing!")
 

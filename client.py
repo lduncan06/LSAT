@@ -37,13 +37,18 @@ def calculate_lsat_score(raw_score):
     percentile = PERCENTILES.get(scaled_score, 1.0)
     return scaled_score, percentile
 
-def display_score_rubric(raw_score, total_questions, scaled_score, percentile, time_used):
+def display_score_rubric(raw_score, total_questions, scaled_score, percentile, time_used):    
+    global score_history
+    scores = score_history.load_all_scores()
+    
     print("\n" + "LSAT SCORE REPORT")
     # disclaimer that certain comparative data/exact scaled scoring may not be accurat
     print(" NOTE: This scoring system is an approximation")
     print("   for practice purposes. Official LSAT scoring")
     print("   varies by test administration and includes")
     print("   equating adjustments not reflected here.")
+
+    
     # provides raw score information
     print(f"\n RAW SCORE")
     print(f"   Correct Answers: {raw_score}")
@@ -175,6 +180,8 @@ def display_statistics_dashboard(all_questions):
     avg_raw = sum(s['raw_score'] for s in scores) / total_tests
     avg_scaled = sum(s['scaled_score'] for s in scores) / total_tests
     best_score = max(s['scaled_score'] for s in scores)
+    
+    score_values = [s['scaled_score'] for s in scores]
     
     print(f"\n OVERALL STATISTICS")
     print(f"   Tests taken: {total_tests}")

@@ -343,7 +343,7 @@ def test_mode(questions):
     user_answers.append({
             'question': q,
             'user_answer': user_answer,
-            'test_number': i,  # Store the test question number (1-25)
+            'question_number': i,  # Store the test question number (1-25)
             'original_id': q['id']  # Keep original ID for reference
         })
     

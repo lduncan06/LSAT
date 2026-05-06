@@ -1,6 +1,8 @@
 import requests
 import random
 import time
+from datetime import datetime
+from score_history import LSATScoreHistory
 
 # defines where the flask server runs
 SERVER_URL = "http://localhost:5000"

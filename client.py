@@ -409,15 +409,18 @@ def choose_mode():
     print("\nPlease select a mode:")
     print("1. Practice Mode - Get feedback after each question, stop anytime")
     print("2. Test Mode - 25 questions, 35 minute time limit, see results at end")
+    print("3. Statistics Analysis - Review your score history and next step")
     
     while True:
-        choice = input("\nEnter 1 or 2: ").strip()
+        choice = input("\nEnter a number from 1 to 7: ").strip()
         if choice == '1':
             return 'practice'
         elif choice == '2':
             return 'test'
+        elif choice == '3':
+            return 'statistics'
         else:
-            print("Invalid choice. Please enter 1 or 2.")
+            print("Invalid choice. Please enter a number from 1 to 7.")
             
 def main():
     global score_history
@@ -436,8 +439,11 @@ def main():
     # run the selected mode
     if mode == 'practice':
         practice_mode(all_questions)
-    else:
+    elif mode == 'test':
         test_mode(all_questions)
+    elif mode == 'statistics':
+        display_statistics_dashboard(all_questions)
+        
 
     print("Thanks for practicing!")
 

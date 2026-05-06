@@ -427,7 +427,7 @@ def choose_mode():
     print("3. Statistics Analysis - Review your score history and next step")
     
     while True:
-        choice = input("\nEnter a number from 1 to 7: ").strip()
+        choice = input("\nEnter a number from 1 to 3: ").strip()
         if choice == '1':
             return 'practice'
         elif choice == '2':
@@ -435,7 +435,7 @@ def choose_mode():
         elif choice == '3':
             return 'statistics'
         else:
-            print("Invalid choice. Please enter a number from 1 to 7.")
+            print("Invalid choice. Please enter a number from 1 to 3.")
             
 def main():
     global score_history

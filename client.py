@@ -251,9 +251,7 @@ def display_statistics_dashboard(all_questions):
         print(f"\n LINEAR REGRESSION TREND ANALYSIS")
         print(f"   Improvement rate: {slope:+.2f} points per test")
         print(f"   Trend line: Score = {slope:+.2f} × Test# + {intercept:.1f}")
-        print(f"   R-squared (fit quality): {r_squared:.3f}")
-        
-        next_projection = recent_avg + improvement_rate
+
         print(f"   Next test projection: {next_projection:.0f}")
         
         if next_projection >= 170:

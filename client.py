@@ -154,6 +154,81 @@ def get_user_answer():
             return ans
         print("Please enter A, B, C, D, or E.")
 
+# create a display of 
+def display_statistics_dashboard(all_questions):
+    """Show comprehensive statistics dashboard"""
+    scores = data_manager.load_all_scores()
+    
+    if not scores:
+        print("\n📊 Not enough data yet. Take some tests first!")
+        return
+    
+    print("\n" + "="*60)
+    print("📊 LSAT PERFORMANCE DASHBOARD")
+    print("="*60)
+    
+    # Overall statistics
+    total_tests = len(scores)
+    avg_raw = sum(s['raw_score'] for s in scores) / total_tests
+    avg_scaled = sum(s['scaled_score'] for s in scores) / total_tests
+    best_score = max(s['scaled_score'] for s in scores)
+    
+    print(f"\n📈 OVERALL STATISTICS")
+    print(f"   Tests taken: {total_tests}")
+    print(f"   Average score: {avg_scaled:.0f} (LSAT)")
+    print(f"   Best score: {best_score} (LSAT)")
+    print(f"   Average raw: {avg_raw:.1f}/25 ({avg_raw/25*100:.1f}%)")
+    
+    # Trend analysis (last 5 tests)
+    if total_tests >= 3:
+        print(f"\n📈 PROGRESS TREND (Last 5 tests)")
+        recent = scores[-5:]
+        
+        for i, score in enumerate(recent, 1):
+            bar = "█" * int(score['scaled_score'] / 180 * 40)
+            print(f"   Test {i}: {score['scaled_score']:3d} {bar}")
+        
+        # Calculate improvement
+        first_avg = sum(s['scaled_score'] for s in recent[:2]) / 2
+        last_avg = sum(s['scaled_score'] for s in recent[-2:]) / 2
+        improvement = last_avg - first_avg
+        
+        if improvement > 0:
+            print(f"\n   📈 Trending UP: +{improvement:.1f} points!")
+        elif improvement < 0:
+            print(f"\n   📉 Trending DOWN: {improvement:.1f} points")
+        else:
+            print(f"\n   ➡️ Consistent performance")
+    
+    # Time analysis
+    print(f"\n⏱️ TIME STATISTICS")
+    avg_time = sum(s.get('time_used', 0) for s in scores) / total_tests
+    avg_minutes = avg_time / 60
+    print(f"   Average time: {avg_minutes:.1f} minutes")
+    
+    if avg_minutes < 30:
+        print("   ⚡ Fast pace - be careful not to rush!")
+    elif avg_minutes > 33:
+        print("   🐢 Working slowly - practice timing!")
+    else:
+        print("   ✅ Good pace for LSAT timing!")
+    
+    # Projected score based on trend
+    if total_tests >= 3:
+        print(f"\n🎯 SCORE PROJECTION")
+        recent_avg = sum(s['scaled_score'] for s in scores[-3:]) / 3
+        improvement_rate = (best_score - scores[0]['scaled_score']) / total_tests
+        
+        next_projection = recent_avg + improvement_rate
+        print(f"   Next test projection: {next_projection:.0f}")
+        
+        if next_projection >= 170:
+            print("   🌟 On track for Top 10 law schools!")
+        elif next_projection >= 160:
+            print("   🌟 On track for Top 50 law schools!")
+    
+    print("\n" + "="*60)
+
 # practice mode allows users to answer as many questions as they want with unlimited time 
 # and get immediate feedback after each answer
 def practice_mode(questions):
